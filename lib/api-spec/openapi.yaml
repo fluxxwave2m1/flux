@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: flowmind
+    description: Workflow automation operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,201 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /flowmind/dashboard:
+    get:
+      operationId: getFlowmindDashboard
+      tags: [flowmind]
+      summary: Get dashboard metrics and recent workflows
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /flowmind/workflows:
+    get:
+      operationId: listFlowmindWorkflows
+      tags: [flowmind]
+      summary: List workflows
+      responses:
+        "200":
+          description: Workflows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workflow"
+    post:
+      operationId: createFlowmindWorkflow
+      tags: [flowmind]
+      summary: Save a workflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkflowInput"
+      responses:
+        "201":
+          description: Created workflow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workflow"
+  /flowmind/workflows/generate:
+    post:
+      operationId: generateFlowmindWorkflow
+      tags: [flowmind]
+      summary: Generate a structured workflow from a natural-language prompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateWorkflowInput"
+      responses:
+        "200":
+          description: Generated workflow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedWorkflow"
+  /flowmind/workflows/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getFlowmindWorkflow
+      tags: [flowmind]
+      summary: Get a workflow
+      responses:
+        "200":
+          description: Workflow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workflow"
+        "404":
+          description: Workflow not found
+    patch:
+      operationId: updateFlowmindWorkflow
+      tags: [flowmind]
+      summary: Update workflow configuration or status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkflowUpdate"
+      responses:
+        "200":
+          description: Updated workflow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workflow"
+    delete:
+      operationId: deleteFlowmindWorkflow
+      tags: [flowmind]
+      summary: Delete a workflow
+      responses:
+        "204":
+          description: Deleted
+  /flowmind/workflows/{id}/executions:
+    post:
+      operationId: runFlowmindWorkflow
+      tags: [flowmind]
+      summary: Simulate a workflow and save execution history
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExecutionInput"
+      responses:
+        "201":
+          description: Execution result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Execution"
+  /flowmind/executions:
+    get:
+      operationId: listFlowmindExecutions
+      tags: [flowmind]
+      summary: List recent executions
+      responses:
+        "200":
+          description: Recent executions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Execution"
+  /flowmind/executions/{id}:
+    get:
+      operationId: getFlowmindExecution
+      tags: [flowmind]
+      summary: Get execution details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Execution details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Execution"
+        "404":
+          description: Execution not found
+  /flowmind/templates:
+    get:
+      operationId: listFlowmindTemplates
+      tags: [flowmind]
+      summary: List workflow templates
+      responses:
+        "200":
+          description: Templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkflowTemplate"
+  /flowmind/templates/{templateId}/use:
+    post:
+      operationId: useFlowmindTemplate
+      tags: [flowmind]
+      summary: Create an editable workflow from a template
+      parameters:
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Created workflow
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workflow"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +230,153 @@ components:
           type: string
       required:
         - status
+    WorkflowNode:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [trigger, condition, action, ai]
+        label:
+          type: string
+        actionType:
+          type: ["string", "null"]
+        position:
+          type: object
+          properties:
+            x: { type: number }
+            y: { type: number }
+          required: [x, y]
+        config:
+          type: object
+          additionalProperties: true
+      required: [id, type, label, position, config]
+    WorkflowEdge:
+      type: object
+      properties:
+        id: { type: string }
+        source: { type: string }
+        target: { type: string }
+        label: { type: ["string", "null"] }
+      required: [id, source, target]
+    WorkflowInput:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        description: { type: string }
+        status:
+          type: string
+          enum: [draft, active, paused]
+        triggerType: { type: string }
+        nodes:
+          type: array
+          items: { $ref: "#/components/schemas/WorkflowNode" }
+        edges:
+          type: array
+          items: { $ref: "#/components/schemas/WorkflowEdge" }
+      required: [name, description, status, triggerType, nodes, edges]
+    WorkflowUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        description: { type: string }
+        status:
+          type: string
+          enum: [draft, active, paused]
+        triggerType: { type: string }
+        nodes:
+          type: array
+          items: { $ref: "#/components/schemas/WorkflowNode" }
+        edges:
+          type: array
+          items: { $ref: "#/components/schemas/WorkflowEdge" }
+    Workflow:
+      allOf:
+        - $ref: "#/components/schemas/WorkflowInput"
+        - type: object
+          properties:
+            id: { type: string }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+          required: [id, createdAt, updatedAt]
+    GenerateWorkflowInput:
+      type: object
+      properties:
+        prompt: { type: string, minLength: 10 }
+      required: [prompt]
+    GeneratedWorkflow:
+      type: object
+      properties:
+        workflow:
+          $ref: "#/components/schemas/WorkflowInput"
+        explanation: { type: string }
+        mode:
+          type: string
+          enum: [ai, demo]
+      required: [workflow, explanation, mode]
+    ExecutionInput:
+      type: object
+      properties:
+        sampleData:
+          type: object
+          additionalProperties: true
+      required: [sampleData]
+    ExecutionNodeLog:
+      type: object
+      properties:
+        nodeId: { type: string }
+        label: { type: string }
+        status:
+          type: string
+          enum: [success, skipped, failed]
+        detail: { type: string }
+        durationMs: { type: integer }
+      required: [nodeId, label, status, detail, durationMs]
+    Execution:
+      type: object
+      properties:
+        id: { type: string }
+        workflowId: { type: string }
+        workflowName: { type: string }
+        status:
+          type: string
+          enum: [success, failed]
+        startedAt: { type: string, format: date-time }
+        durationMs: { type: integer }
+        nodesExecuted: { type: integer }
+        totalNodes: { type: integer }
+        simulated: { type: boolean }
+        sampleData:
+          type: object
+          additionalProperties: true
+        nodeLogs:
+          type: array
+          items: { $ref: "#/components/schemas/ExecutionNodeLog" }
+      required:
+        [id, workflowId, workflowName, status, startedAt, durationMs, nodesExecuted, totalNodes, simulated, sampleData, nodeLogs]
+    DashboardSummary:
+      type: object
+      properties:
+        activeWorkflows: { type: integer }
+        executionsToday: { type: integer }
+        successRate: { type: number }
+        failedRuns: { type: integer }
+        recentWorkflows:
+          type: array
+          items: { $ref: "#/components/schemas/Workflow" }
+        recentExecutions:
+          type: array
+          items: { $ref: "#/components/schemas/Execution" }
+      required: [activeWorkflows, executionsToday, successRate, failedRuns, recentWorkflows, recentExecutions]
+    WorkflowTemplate:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        triggerType: { type: string }
+        actionCount: { type: integer }
+        category: { type: string }
+      required: [id, name, description, triggerType, actionCount, category]
 
