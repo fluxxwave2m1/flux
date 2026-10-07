@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "FlowMind"
+description = "A natural-language workflow automation prototype. Describe an outcome, generate and edit a workflow, simulate its run, and review execution history."
+version = "1.0.0"
+id = "artifacts/flowmind"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22473
+
+[services.development]
+run = "pnpm --filter @workspace/flowmind run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/flowmind", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/flowmind/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22473"
+BASE_PATH = "/"

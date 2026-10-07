@@ -1,0 +1,1521 @@
+You are the lead full-stack engineer, product designer, AI engineer, and hackathon architect for this project.
+
+I am building a hackathon project based on this exact problem statement:
+
+PROBLEM STATEMENT:
+"Create a platform where users can create automated workflows such as If → Condition → Action. For example, when a new customer registers, automatically send a welcome email, create a CRM record, and notify the sales team."
+
+EXPECTED OUTCOME:
+A working prototype of an AI-Based Workflow Automation Platform.
+
+IMPORTANT:
+Do NOT build a generic CRUD dashboard.
+Do NOT build only a static UI.
+Do NOT create fake buttons that do nothing.
+Do NOT make the project look like a template.
+The application must feel like a real SaaS automation product.
+
+The main differentiator must be:
+
+NATURAL LANGUAGE → AI UNDERSTANDS THE USER'S INTENTION → GENERATES A WORKFLOW → USER CAN VISUALLY EDIT IT → USER CAN TEST/SIMULATE IT → WORKFLOW EXECUTES → EXECUTION LOG IS SHOWN.
+
+The project should be polished enough for a serious hackathon demonstration.
+
+==================================================
+1. PRODUCT CONCEPT
+==================================================
+
+Build an application called:
+
+"FlowMind"
+
+Tagline:
+
+"Describe it. Automate it."
+
+Core idea:
+
+A user should be able to create automation workflows using either:
+
+1. Visual workflow builder
+2. Natural-language AI workflow generator
+
+Example:
+
+User types:
+
+"When a new customer registers, send them a welcome email, create a CRM record, and notify the sales team."
+
+The AI should transform that into:
+
+TRIGGER
+  New Customer Registered
+        ↓
+ACTION
+  Send Welcome Email
+        ↓
+ACTION
+  Create CRM Record
+        ↓
+ACTION
+  Notify Sales Team
+
+Another example:
+
+"When inventory falls below 10 units, notify the manager and create a purchase request."
+
+AI should generate:
+
+Trigger:
+Inventory Updated
+
+Condition:
+Inventory < 10
+
+Actions:
+1. Notify Manager
+2. Create Purchase Request
+
+Another:
+
+"If a support message is urgent, notify the support manager and create a high-priority ticket."
+
+AI should generate:
+
+Trigger:
+New Support Message
+
+AI Decision:
+Determine urgency
+
+Condition:
+Urgency = High
+
+Actions:
+Notify Support Manager
+Create High Priority Ticket
+
+==================================================
+2. CORE USER FLOW
+==================================================
+
+The primary user flow must be extremely simple:
+
+LANDING/DASHBOARD
+      ↓
+CREATE WORKFLOW
+      ↓
+"What do you want to automate?"
+      ↓
+Natural language input
+      ↓
+AI GENERATES WORKFLOW
+      ↓
+VISUAL WORKFLOW CANVAS
+      ↓
+USER EDITS / CONFIGURES
+      ↓
+TEST WORKFLOW
+      ↓
+SIMULATION RESULT
+      ↓
+ACTIVATE WORKFLOW
+      ↓
+EXECUTION HISTORY
+
+The user should never feel lost.
+
+==================================================
+3. DESIGN DIRECTION
+==================================================
+
+Create a premium modern SaaS interface.
+
+Visual inspiration:
+
+- Linear
+- Vercel
+- Stripe
+- n8n
+- Zapier
+- Make
+- modern AI SaaS products
+
+BUT DO NOT COPY THEIR UI.
+
+Design characteristics:
+
+- dark-first interface
+- deep navy/black background
+- subtle borders
+- blue/violet accent colors
+- clean typography
+- strong spacing
+- rounded cards
+- subtle shadows
+- tasteful gradients
+- professional icons
+- smooth micro-interactions
+- excellent empty states
+- responsive design
+
+Avoid:
+
+- excessive gradients
+- childish UI
+- huge unnecessary animations
+- clutter
+- excessive glassmorphism
+- generic Bootstrap-looking components
+
+The application should look like a product that could actually launch.
+
+==================================================
+4. TECHNOLOGY
+==================================================
+
+Use the most reliable stack available in the Replit environment.
+
+Preferred:
+
+Frontend:
+- React
+- TypeScript
+- Tailwind CSS
+- modern component architecture
+
+Backend:
+- Node.js / TypeScript
+
+Database:
+- PostgreSQL if available
+- otherwise use the most reliable persistent database available in Replit
+
+Use a proper ORM if appropriate.
+
+For workflow visualization, use:
+
+React Flow / XYFlow or another mature workflow graph library.
+
+Use Lucide or another professional icon library.
+
+Do NOT implement the graph editor from scratch unless necessary.
+
+==================================================
+5. APPLICATION STRUCTURE
+==================================================
+
+Create these major sections:
+
+1. Dashboard
+2. Workflows
+3. Workflow Builder
+4. Templates
+5. Executions
+6. Integrations
+7. Settings
+
+Sidebar:
+
+FlowMind logo
+
+Dashboard
+Workflows
+Templates
+Executions
+Integrations
+
+bottom:
+
+Settings
+User profile
+
+==================================================
+6. DASHBOARD
+==================================================
+
+Dashboard should show:
+
+Header:
+
+"Good morning"
+"Automate the repetitive. Focus on what matters."
+
+Primary CTA:
+
+"+ Create Workflow"
+
+Statistics:
+
+Active Workflows
+Executions Today
+Successful Runs
+Failed Runs
+
+Example:
+
+12 Active Workflows
+248 Executions Today
+96.8% Success Rate
+8 Failed
+
+Show:
+
+Recent Workflows
+
+Each workflow card should contain:
+
+Workflow name
+Description
+Status
+Last run
+Success rate
+Number of executions
+Enable/disable toggle
+
+Example workflows:
+
+Customer Onboarding
+Low Inventory Alert
+Support Escalation
+Student Assignment Reminder
+
+Also show:
+
+Recent Activity
+
+Example:
+
+✓ Customer Onboarding executed successfully
+2 minutes ago
+
+✓ Low Inventory Alert executed successfully
+12 minutes ago
+
+⚠ Support Escalation failed
+31 minutes ago
+
+==================================================
+7. CREATE WORKFLOW EXPERIENCE
+==================================================
+
+When the user clicks:
+
+"+ Create Workflow"
+
+open a beautiful creation screen.
+
+Title:
+
+"What do you want to automate?"
+
+Large natural-language input.
+
+Placeholder:
+
+"Example: When a new customer signs up, send them a welcome email, create a CRM record, and notify the sales team."
+
+Button:
+
+"Generate with AI"
+
+Also provide:
+
+"Start from scratch"
+
+and:
+
+"Browse templates"
+
+==================================================
+8. AI WORKFLOW GENERATOR
+==================================================
+
+THIS IS THE MOST IMPORTANT FEATURE.
+
+The AI must interpret natural-language instructions and convert them into a structured workflow.
+
+Do NOT allow the AI to directly generate executable arbitrary code.
+
+Instead force the AI to output a strict structured JSON schema.
+
+Example:
+
+{
+  "name": "Customer Onboarding",
+  "description": "Automates customer onboarding",
+  "trigger": {
+    "type": "customer.created",
+    "label": "New Customer Registered"
+  },
+  "nodes": [
+    {
+      "id": "node_1",
+      "type": "trigger",
+      "label": "New Customer Registered"
+    },
+    {
+      "id": "node_2",
+      "type": "action",
+      "actionType": "send_email",
+      "label": "Send Welcome Email"
+    },
+    {
+      "id": "node_3",
+      "type": "action",
+      "actionType": "create_record",
+      "label": "Create CRM Record"
+    },
+    {
+      "id": "node_4",
+      "type": "action",
+      "actionType": "notification",
+      "label": "Notify Sales Team"
+    }
+  ],
+  "edges": [
+    ["node_1", "node_2"],
+    ["node_2", "node_3"],
+    ["node_3", "node_4"]
+  ]
+}
+
+The AI response must be validated before being accepted.
+
+If invalid:
+
+- attempt structured repair
+- otherwise show a useful error
+- never crash the application
+
+==================================================
+9. AI CAPABILITIES
+==================================================
+
+The AI should understand:
+
+Triggers
+Conditions
+Actions
+Branches
+AI decisions
+Data transformations
+
+Examples:
+
+"when"
+"whenever"
+"if"
+"unless"
+"only when"
+"after"
+"before"
+"when something changes"
+"when a customer registers"
+"when stock drops"
+"when a message is urgent"
+
+AI should intelligently infer the workflow structure.
+
+Examples:
+
+User:
+
+"When a customer signs up, send an email and notify the sales team."
+
+AI:
+
+Trigger:
+Customer Created
+
+Actions:
+Send Email
+Notify Sales
+
+User:
+
+"If inventory is below 10, notify the manager."
+
+AI:
+
+Trigger:
+Inventory Updated
+
+Condition:
+Inventory < 10
+
+Action:
+Notify Manager
+
+User:
+
+"When someone submits a support request, classify it using AI. If it is urgent, notify the manager and create a high priority ticket."
+
+AI:
+
+Trigger:
+Support Request Created
+
+AI Decision:
+Classify urgency
+
+Condition:
+Urgency = High
+
+Actions:
+Notify Manager
+Create High Priority Ticket
+
+==================================================
+10. AI EXPLANATION
+==================================================
+
+After generating a workflow, show a small AI explanation panel:
+
+"Here's what I understood"
+
+Example:
+
+Trigger:
+New customer registration
+
+Actions:
+1. Send welcome email
+2. Create CRM record
+3. Notify sales team
+
+Conditions:
+None
+
+This makes the AI transparent.
+
+==================================================
+11. VISUAL WORKFLOW BUILDER
+==================================================
+
+This is the centerpiece of the application.
+
+Use React Flow / XYFlow.
+
+Canvas should show nodes.
+
+Node categories:
+
+TRIGGER
+CONDITION
+ACTION
+AI DECISION
+
+Visual hierarchy:
+
+[Trigger]
+     ↓
+[Condition]
+     ↓
+[Action]
+
+Nodes must be draggable.
+
+Users should be able to:
+
+- add node
+- delete node
+- duplicate node
+- connect nodes
+- reconnect nodes
+- edit node
+- configure node
+- zoom
+- pan
+- fit canvas
+- undo
+- redo
+
+Provide a node library/sidebar.
+
+==================================================
+12. NODE TYPES
+==================================================
+
+TRIGGER NODES:
+
+- Customer Created
+- Order Created
+- Form Submitted
+- Inventory Updated
+- New Support Message
+- Scheduled Time
+- Webhook Received
+- Manual Trigger
+
+CONDITION NODES:
+
+- Value comparison
+- Contains text
+- Equals
+- Greater than
+- Less than
+- AND
+- OR
+
+ACTION NODES:
+
+- Send Email
+- Send Notification
+- Create Record
+- Update Record
+- Create Task
+- Log Event
+- Send Webhook
+
+AI NODE:
+
+- Classify Text
+- Summarize
+- Extract Information
+- Determine Sentiment
+- Determine Urgency
+- Categorize Request
+
+==================================================
+13. NODE CONFIGURATION
+==================================================
+
+Clicking a node opens a configuration panel.
+
+Example:
+
+Send Email
+
+Fields:
+
+To
+Subject
+Message
+
+Support variables such as:
+
+{{customer.name}}
+{{customer.email}}
+{{order.id}}
+
+Example:
+
+"Welcome {{customer.name}}!"
+
+Condition node:
+
+Field:
+inventory
+
+Operator:
+less than
+
+Value:
+10
+
+AI node:
+
+Input:
+{{support.message}}
+
+Task:
+Classify urgency
+
+Possible values:
+
+Low
+Medium
+High
+
+==================================================
+14. VARIABLES / DATA MAPPING
+==================================================
+
+Implement a basic variable system.
+
+Example:
+
+{{customer.name}}
+
+{{customer.email}}
+
+{{order.total}}
+
+{{inventory.quantity}}
+
+Variables should be selectable from a dropdown when configuring actions.
+
+Make the UI visually clear.
+
+==================================================
+15. WORKFLOW VALIDATION
+==================================================
+
+Before activation, validate:
+
+- workflow has exactly one valid starting trigger
+- no disconnected nodes
+- no invalid connections
+- required fields completed
+- conditions configured
+- actions configured
+- no obvious infinite loops
+- all nodes reachable from trigger
+
+Show validation errors clearly.
+
+Example:
+
+"Workflow cannot be activated"
+
+2 issues found:
+
+⚠ Send Email: recipient is missing
+⚠ Condition: comparison value is missing
+
+Button:
+
+"Fix Issues"
+
+==================================================
+16. TEST / SIMULATION MODE
+==================================================
+
+This is extremely important for the hackathon demo.
+
+Add:
+
+"Test Workflow"
+
+button.
+
+When clicked, open a simulation modal.
+
+Allow sample input:
+
+Customer Name:
+Alex
+
+Customer Email:
+alex@example.com
+
+Inventory:
+7
+
+Support Message:
+"This payment issue is extremely urgent."
+
+Then execute the workflow virtually.
+
+Show animated execution:
+
+✓ Trigger received
+
+✓ Condition evaluated
+
+✓ AI classified message
+
+✓ Action executed
+
+✓ Notification sent
+
+At the end:
+
+"Workflow completed successfully"
+
+Execution time:
+1.24s
+
+Nodes executed:
+5/5
+
+Do not pretend an external email was actually sent.
+
+Clearly mark simulated actions as:
+
+SIMULATED
+
+==================================================
+17. REAL EXECUTION ENGINE
+==================================================
+
+Implement a lightweight workflow execution engine.
+
+Represent workflow as a directed graph.
+
+The engine should:
+
+1. Find trigger
+2. Execute nodes sequentially
+3. Evaluate conditions
+4. Follow branches
+5. Execute actions
+6. Store execution logs
+7. Track success/failure
+8. Stop safely on errors
+
+Each execution should have:
+
+execution ID
+workflow ID
+start time
+end time
+status
+node results
+error information
+
+==================================================
+18. EXECUTION LOG
+==================================================
+
+Create an execution details page.
+
+Example:
+
+Execution #EX-1042
+
+Workflow:
+Customer Onboarding
+
+Status:
+SUCCESS
+
+Timeline:
+
+09:42:11
+✓ Trigger received
+
+09:42:12
+✓ Welcome email action
+
+09:42:12
+✓ CRM record created
+
+09:42:13
+✓ Sales notification sent
+
+Duration:
+1.8 seconds
+
+Show node-by-node details.
+
+==================================================
+19. FAILURE HANDLING
+==================================================
+
+If an action fails:
+
+Show:
+
+Workflow execution failed
+
+Failed node:
+Send Email
+
+Reason:
+Recipient email is missing
+
+Allow:
+
+Retry
+Edit workflow
+View details
+
+Never let an error crash the whole application.
+
+==================================================
+20. WORKFLOW STATUS
+==================================================
+
+Every workflow should support:
+
+Draft
+Active
+Paused
+
+Buttons:
+
+Activate
+Pause
+Edit
+Duplicate
+Delete
+
+Show status visually.
+
+==================================================
+21. TEMPLATES
+==================================================
+
+Create a Templates page.
+
+Templates:
+
+1. Customer Onboarding
+2. Low Inventory Alert
+3. Support Escalation
+4. Lead Follow-up
+5. Employee Leave Approval
+6. Assignment Reminder
+7. Order Confirmation
+8. Expense Approval
+
+Each template should have:
+
+Name
+Description
+Trigger
+Number of actions
+"Use Template"
+
+Clicking Use Template creates a real editable workflow.
+
+==================================================
+22. INTEGRATIONS
+==================================================
+
+Create an Integrations page.
+
+For the prototype, create integration cards:
+
+Email
+Webhook
+CRM
+Slack/Notifications
+Database
+
+Clearly distinguish:
+
+Connected
+Available
+Demo
+
+Do not claim a real integration is connected when it is not.
+
+For the hackathon prototype, simulated integrations are acceptable.
+
+==================================================
+23. DATABASE
+==================================================
+
+Persist:
+
+Users
+Workflows
+Workflow nodes
+Workflow edges
+Executions
+Execution node logs
+Templates
+
+Do not rely entirely on browser localStorage.
+
+The workflow must survive page refresh.
+
+==================================================
+24. AUTHENTICATION
+==================================================
+
+If authentication is practical in the current environment:
+
+Implement:
+
+Sign up
+Login
+Logout
+
+If authentication would significantly delay the core application, create a simple demo user experience but structure the backend so authentication can be added later.
+
+Do NOT let authentication prevent the core hackathon demo from working.
+
+==================================================
+25. RESPONSIVE DESIGN
+==================================================
+
+Desktop is the primary target.
+
+Also support tablet and mobile.
+
+The workflow canvas should remain usable.
+
+Do not allow horizontal overflow across the entire application.
+
+==================================================
+26. ACCESSIBILITY
+==================================================
+
+Implement:
+
+- semantic HTML
+- keyboard-accessible buttons
+- visible focus states
+- good contrast
+- meaningful labels
+- accessible dialogs
+- tooltips where icons are ambiguous
+
+==================================================
+27. LOADING STATES
+==================================================
+
+Every asynchronous action must have a loading state.
+
+AI generation:
+
+"Understanding your workflow..."
+
+Then:
+
+"Building automation..."
+
+Then:
+
+"Workflow ready."
+
+Use a subtle animation.
+
+==================================================
+28. EMPTY STATES
+==================================================
+
+If no workflows exist:
+
+"No workflows yet"
+
+"Turn repetitive tasks into automation."
+
+Button:
+
+"Create your first workflow"
+
+==================================================
+29. DEMO DATA
+==================================================
+
+Seed the application with realistic examples.
+
+At least:
+
+Customer Onboarding
+Low Inventory Alert
+Support Escalation
+Lead Follow-up
+
+Each should have:
+
+real nodes
+real edges
+execution history
+success/failure examples
+
+This makes the application immediately impressive when opened.
+
+==================================================
+30. LANDING EXPERIENCE
+==================================================
+
+Create a polished landing/dashboard introduction.
+
+Headline:
+
+"Describe the work.
+Let AI automate it."
+
+Subtitle:
+
+"Build powerful workflows using natural language, conditions, actions, and AI decisions."
+
+CTA:
+
+"Create Workflow"
+
+Secondary:
+
+"Explore Templates"
+
+Show a visual workflow preview:
+
+New Customer
+      ↓
+AI Analysis
+      ↓
+Condition
+   ↙      ↘
+ YES       NO
+ ↓          ↓
+Email     Log
+ ↓
+Notify Team
+
+==================================================
+31. MICROINTERACTIONS
+==================================================
+
+Add subtle professional interactions:
+
+- button hover
+- node hover
+- smooth modal transitions
+- workflow generation animation
+- execution timeline animation
+- status transitions
+- toast notifications
+
+Do not over-animate.
+
+==================================================
+32. ERROR HANDLING
+==================================================
+
+Handle:
+
+AI unavailable
+Database unavailable
+Invalid AI response
+Network failure
+Invalid workflow
+Missing configuration
+Execution failure
+
+Display useful messages.
+
+Never show raw stack traces to users.
+
+==================================================
+33. SECURITY
+==================================================
+
+Do not execute arbitrary AI-generated JavaScript.
+
+The AI only generates structured workflow JSON.
+
+Validate and sanitize all AI-generated data.
+
+Validate all API inputs.
+
+Do not expose API keys in frontend code.
+
+Use environment variables for secrets.
+
+==================================================
+34. AI PROVIDER
+==================================================
+
+Use the AI provider available in the Replit environment.
+
+If an AI API key/integration already exists, use it.
+
+Otherwise structure the code around an environment variable such as:
+
+AI_API_KEY
+
+Do not hard-code secrets.
+
+Create a clean AI service abstraction:
+
+generateWorkflow()
+validateWorkflow()
+repairWorkflow()
+explainWorkflow()
+
+If AI is temporarily unavailable, provide a graceful demo fallback using deterministic example workflows rather than crashing.
+
+==================================================
+35. IMPORTANT AI PROMPTING
+==================================================
+
+The internal AI system prompt should instruct the model:
+
+"You are a workflow automation architect.
+
+Convert natural-language automation requirements into a valid workflow graph.
+
+Never generate arbitrary executable code.
+
+Only use supported triggers, conditions, AI operations, and actions.
+
+Return valid structured JSON.
+
+Ensure every node has a unique ID.
+
+Ensure edges reference existing nodes.
+
+Ensure the graph starts from a trigger.
+
+Infer reasonable workflow structure but do not invent dangerous external actions.
+
+If the request is ambiguous, ask for clarification or make the smallest reasonable assumption."
+
+==================================================
+36. DEMO SCENARIO
+==================================================
+
+Make this scenario work exceptionally well:
+
+User enters:
+
+"When a new customer registers, send them a personalized welcome email, create a CRM record, and notify the sales team."
+
+AI generates:
+
+New Customer Registered
+        ↓
+Send Personalized Welcome Email
+        ↓
+Create CRM Record
+        ↓
+Notify Sales Team
+
+Then user clicks:
+
+"Test Workflow"
+
+Input:
+
+Customer Name:
+Sarah
+
+Email:
+sarah@example.com
+
+The system shows:
+
+✓ Customer registration detected
+✓ Personalized email generated
+✓ CRM record prepared
+✓ Sales notification prepared
+
+Then:
+
+WORKFLOW COMPLETED
+
+Execution time:
+1.2 seconds
+
+Actions:
+4/4 successful
+
+==================================================
+37. SECOND DEMO SCENARIO
+==================================================
+
+Make this work too:
+
+"If inventory falls below 10 units, notify the manager and create a purchase request."
+
+AI generates:
+
+Inventory Updated
+       ↓
+Inventory < 10?
+     ↙       ↘
+   YES        NO
+    ↓          ↓
+Notify       End
+Manager
+    ↓
+Create Purchase Request
+
+This demonstrates branching logic.
+
+==================================================
+38. THIRD DEMO SCENARIO
+==================================================
+
+Make this work:
+
+"When a support request arrives, use AI to determine whether it is urgent. If urgent, notify the manager and create a high-priority support ticket."
+
+Workflow:
+
+Support Request
+       ↓
+AI Urgency Classification
+       ↓
+Urgency = High?
+      ↙      ↘
+    YES       NO
+     ↓         ↓
+Notify       Normal
+Manager      Queue
+     ↓
+Create High Priority Ticket
+
+This demonstrates why the platform is actually AI-based rather than simply being a workflow builder.
+
+==================================================
+39. PRODUCT DIFFERENTIATOR
+==================================================
+
+The application should communicate this concept:
+
+Traditional automation:
+
+User manually creates:
+Trigger → Condition → Action
+
+FlowMind:
+
+User describes the desired outcome.
+
+AI understands the intention.
+
+AI builds the workflow.
+
+User reviews it.
+
+User modifies it.
+
+User tests it.
+
+User activates it.
+
+Therefore:
+
+Natural Language
+        ↓
+AI Understanding
+        ↓
+Workflow Generation
+        ↓
+Visual Editing
+        ↓
+Simulation
+        ↓
+Automation
+
+This is the central story of the product.
+
+==================================================
+40. HACKATHON DEMO OPTIMIZATION
+==================================================
+
+Optimize the application for a 3–5 minute live demonstration.
+
+The ideal demo:
+
+1. Open dashboard
+2. Click Create Workflow
+3. Type a natural-language instruction
+4. Click Generate with AI
+5. AI generates visual workflow
+6. Show AI explanation
+7. Modify one condition
+8. Click Test Workflow
+9. Show execution animation
+10. Open execution history
+11. Return to dashboard
+12. Show workflow as Active
+
+The entire flow must feel fast.
+
+==================================================
+41. PERFORMANCE
+==================================================
+
+Keep the application fast.
+
+Avoid unnecessary API calls.
+
+Lazy-load large components if useful.
+
+Do not make the workflow canvas lag.
+
+Do not repeatedly call AI when unnecessary.
+
+Cache where appropriate.
+
+==================================================
+42. CODE QUALITY
+==================================================
+
+Use:
+
+TypeScript
+Reusable components
+Clean folder structure
+Clear naming
+Reusable workflow node types
+Reusable services
+API validation
+Error boundaries
+
+Do not create one giant component.
+
+Separate:
+
+UI
+API
+database
+AI service
+workflow engine
+validation
+types
+
+==================================================
+43. PROJECT STRUCTURE
+==================================================
+
+Use a clean structure similar to:
+
+src/
+  components/
+    workflow/
+    dashboard/
+    ui/
+  pages/
+  services/
+    ai/
+    workflow/
+  lib/
+  types/
+  hooks/
+
+server/
+  routes/
+  services/
+  db/
+
+Do not follow this literally if the chosen framework has a better standard architecture.
+
+==================================================
+44. FINAL QUALITY BAR
+==================================================
+
+Before considering the project complete, test all major flows.
+
+Test:
+
+Create workflow
+AI generation
+Edit workflow
+Add node
+Delete node
+Connect nodes
+Configure condition
+Configure action
+Save workflow
+Reload page
+Workflow persists
+Test workflow
+Simulation
+Execution log
+Activate workflow
+Pause workflow
+Duplicate workflow
+Delete workflow
+Template creation
+Error handling
+
+Fix all runtime errors.
+
+No broken buttons.
+
+No dead navigation.
+
+No placeholder text such as:
+
+"Lorem ipsum"
+
+"No data"
+
+"Coming soon"
+
+unless genuinely appropriate.
+
+==================================================
+45. DO NOT OVERENGINEER
+==================================================
+
+This is a hackathon prototype.
+
+Prioritize:
+
+1. AI workflow generation
+2. Visual workflow builder
+3. Conditions
+4. Actions
+5. Simulation
+6. Execution history
+7. Beautiful UI
+
+Do NOT waste development time building:
+
+- complex billing
+- enterprise RBAC
+- real payment system
+- huge third-party integration ecosystem
+- complicated deployment infrastructure
+
+The core product must be excellent first.
+
+==================================================
+46. IMPORTANT: BUILD, DON'T JUST PLAN
+==================================================
+
+Do not respond with only an implementation plan.
+
+Actually create the application.
+
+Install required dependencies.
+
+Create the frontend.
+
+Create the backend.
+
+Create the database schema.
+
+Create API routes.
+
+Implement AI workflow generation.
+
+Implement the workflow engine.
+
+Implement the visual editor.
+
+Implement simulation.
+
+Implement execution history.
+
+Seed demo data.
+
+Run the application.
+
+Test it.
+
+Fix errors.
+
+Only after the application is functional, summarize what was built.
+
+==================================================
+47. FINAL SELF-CHECK
+==================================================
+
+Before finishing, ask yourself:
+
+Can a judge open this application and immediately understand what it does?
+
+Can I type a natural-language automation request?
+
+Does AI convert it into a real visual workflow?
+
+Can I edit the workflow?
+
+Can I test it?
+
+Can I see exactly what happened?
+
+Does the application look professional?
+
+Does it satisfy:
+
+"If → Condition → Action"
+
+Does it clearly demonstrate AI?
+
+Does it feel more impressive than a normal CRUD application?
+
+If any answer is NO, fix it before finishing.
+
+Build the complete working application now.
