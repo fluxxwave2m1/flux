@@ -1,0 +1,607 @@
+I have reviewed the current FlowMind application you built.
+
+The functionality foundation is useful, but I do NOT like the current UX/UI and
+the product's core purpose is not immediately understandable.
+
+DO NOT start over and do not delete working backend functionality.
+
+Refactor and redesign the existing application around the following product vision.
+
+==================================================
+CORE PRODUCT
+==================================================
+
+FlowMind is an AI-first workflow automation platform.
+
+The most important experience is:
+
+USER DESCRIBES A TASK
+        ↓
+AI UNDERSTANDS IT
+        ↓
+AI GENERATES WORKFLOW
+        ↓
+USER REVIEWS WORKFLOW
+        ↓
+USER EDITS WORKFLOW
+        ↓
+USER TESTS WORKFLOW
+        ↓
+USER ACTIVATES WORKFLOW
+        ↓
+EXECUTION + LOGS
+
+The current application feels too much like a generic SaaS
+analytics/dashboard product.
+
+Fix this.
+
+==================================================
+1. COMPLETELY REDESIGN THE UX
+==================================================
+
+Do NOT preserve the current visual design just because it already exists.
+
+Use a premium AI-native interface inspired by modern products such as
+Linear, Vercel, Raycast, Claude-style AI interfaces, and modern developer
+tools.
+
+Do NOT copy their UI.
+
+The design should feel:
+
+- intelligent
+- futuristic but professional
+- minimal
+- technical
+- premium
+- clear
+- visually distinctive
+
+Avoid:
+
+- generic admin dashboard appearance
+- excessive cards
+- unnecessary statistics
+- oversized empty spaces
+- excessive rounded rectangles
+- excessive gradients
+- generic SaaS template styling
+
+==================================================
+2. NEW MAIN NAVIGATION
+==================================================
+
+Use a desktop left sidebar.
+
+FLOWMIND
+
+Home
+AI Builder
+Workflows
+Runs
+Tools
+Templates
+
+----------------
+
+Settings
+
+The sidebar should be clean and compact.
+
+The AI Builder must be visually emphasized.
+
+Do NOT use the current desktop bottom navigation.
+
+==================================================
+3. REDESIGN HOME
+==================================================
+
+The home page should immediately explain what FlowMind does.
+
+Hero:
+
+"Automate anything you can describe."
+
+Subtitle:
+
+"Tell FlowMind what you want done. AI turns your instructions into
+workflows you can inspect, test, and run."
+
+Primary button:
+
+"Create with AI"
+
+Secondary:
+
+"Browse templates"
+
+Below this, show a small number of useful metrics:
+
+Active workflows
+Runs today
+Success rate
+
+Do NOT make statistics the main focus.
+
+Then show:
+
+Recent workflows
+Recent runs
+
+==================================================
+4. AI BUILDER MUST BE THE MAIN EXPERIENCE
+==================================================
+
+Create a dedicated AI Builder page.
+
+Heading:
+
+"What do you want to automate?"
+
+Subheading:
+
+"Describe the task in plain English. FlowMind will build the workflow."
+
+Large command-style input:
+
+Example:
+
+"When a customer submits a support request, analyze it with AI. If it is
+urgent, notify the manager and create a high-priority ticket."
+
+Primary button:
+
+"Build Workflow"
+
+Also include example prompts:
+
+"Monitor inventory and alert me when stock is low."
+
+"Process new customer registrations."
+
+"Analyze support requests and escalate urgent ones."
+
+==================================================
+5. AI GENERATION EXPERIENCE
+==================================================
+
+When the user clicks Build Workflow, show a short professional generation
+animation.
+
+Example:
+
+Understanding request...
+Planning workflow...
+Selecting tools...
+Building workflow...
+
+Then show:
+
+"Here's what I understood"
+
+Do not just dump JSON.
+
+Show a human-readable explanation.
+
+==================================================
+6. WORKFLOW VISUALIZATION
+==================================================
+
+The generated workflow should appear as a beautiful visual graph.
+
+Example:
+
+┌─────────────────────┐
+│ NEW SUPPORT REQUEST │
+│       TRIGGER       │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│   AI ANALYZE        │
+│   URGENCY           │
+└──────────┬──────────┘
+           ↓
+      ┌─────────┐
+      │ URGENT? │
+      └───┬─┬───┘
+         YES NO
+          ↓   ↓
+       Notify Normal
+       Manager Queue
+          ↓
+    Create Ticket
+
+Use React Flow / XYFlow.
+
+Make nodes visually distinct by type:
+
+Trigger
+Condition
+AI
+Action
+Browser
+API
+Approval
+
+==================================================
+7. WORKFLOW BUILDER LAYOUT
+==================================================
+
+Use:
+
+LEFT:
+Tool/node library
+
+CENTER:
+Large workflow canvas
+
+RIGHT:
+Selected node configuration
+
+TOP:
+Workflow name
+Save
+Test
+Activate
+
+This should feel like a real automation IDE.
+
+==================================================
+8. TOOL LIBRARY
+==================================================
+
+Create a visible tool library.
+
+Categories:
+
+AI
+Browser
+API
+Logic
+Data
+Files
+Communication
+Scheduling
+Approval
+
+Browser tools:
+
+Open webpage
+Read webpage
+Extract text
+Find element
+Click
+Type
+Select
+Wait
+
+AI tools:
+
+Analyze
+Classify
+Summarize
+Extract
+Generate
+
+Logic:
+
+IF
+ELSE
+AND
+OR
+Compare
+Loop
+
+API:
+
+GET
+POST
+PUT
+PATCH
+Webhook
+
+Communication:
+
+Email
+Notification
+
+Make these real workflow nodes, not decorative cards.
+
+==================================================
+9. BROWSER AUTOMATION
+==================================================
+
+The current application contains a workflow whose description appears to
+reference reading a question and selecting an answer.
+
+Do NOT pretend this currently works unless the browser execution engine
+actually works.
+
+Implement browser automation as a proper modular tool system.
+
+For authorized/demo environments support:
+
+Open URL
+Read visible page content
+Extract text
+Find element
+Click
+Type
+Select
+Wait
+Read result
+
+AI should be able to choose these tools as workflow nodes.
+
+Do NOT execute arbitrary AI-generated JavaScript.
+
+Do NOT bypass authentication, CAPTCHAs, access controls, or security
+mechanisms.
+
+==================================================
+10. TEST MODE
+==================================================
+
+Create a very clear Test Workflow experience.
+
+When user clicks Test:
+
+Show:
+
+🧪 TEST MODE
+
+"External actions will not be performed."
+
+Allow sample input.
+
+Then execute the workflow through the workflow engine.
+
+Show a live execution timeline:
+
+✓ Trigger received
+✓ AI analysis completed
+✓ Condition evaluated
+✓ Action simulated
+✓ Workflow completed
+
+Clearly label simulated actions.
+
+==================================================
+11. LIVE MODE
+==================================================
+
+Add a separate:
+
+LIVE
+
+mode.
+
+Clearly explain:
+
+"Live mode can perform configured external actions."
+
+Do not claim something happened if it was only simulated.
+
+==================================================
+12. EXECUTION PAGE
+==================================================
+
+Rename "Execution history" to:
+
+"Runs"
+
+Make it feel like a developer/automation execution console.
+
+Each run:
+
+Workflow
+Status
+Duration
+Started
+Steps
+
+Clicking a run opens:
+
+Timeline
+Node inputs
+Node outputs
+Errors
+Variables
+Execution path
+
+==================================================
+13. WORKFLOWS PAGE
+==================================================
+
+Keep the workflow list but redesign it.
+
+Each row should show:
+
+Name
+Description
+Trigger
+Steps
+Status
+Last run
+
+Do NOT use excessive cards.
+
+Add:
+
+Search
+Status filter
+Create workflow
+
+Remove duplicate demo workflows.
+
+==================================================
+14. SETTINGS
+==================================================
+
+Fix the current demo settings.
+
+Do not hard-code:
+
+Northstar Studio
+Alex
+Pacific Time
+
+Use:
+
+FlowMind Workspace
+
+and allow the user to configure:
+
+Workspace name
+Timezone
+Notifications
+
+Default timezone should be:
+
+Asia/Kolkata / UTC+05:30
+
+==================================================
+15. DEMO DATA
+==================================================
+
+Create only a few strong demo workflows:
+
+1. Customer Onboarding
+2. Low Inventory Alert
+3. Support Escalation
+4. Browser Research Demo
+
+Remove unnecessary duplicates.
+
+==================================================
+16. BROWSER DEMO
+==================================================
+
+Create a safe local/demo webpage inside the application.
+
+Then demonstrate:
+
+Open demo webpage
+↓
+Read page
+↓
+Extract information
+↓
+AI analysis
+↓
+Condition
+↓
+Action
+
+This allows the browser automation capability to be demonstrated reliably
+without depending on an external website.
+
+==================================================
+17. MAKE THE PRODUCT'S VALUE OBVIOUS
+==================================================
+
+A judge should understand the product within 10 seconds.
+
+The core message should always be:
+
+"Describe a task → AI builds the workflow → Review → Test → Run."
+
+Make this visible throughout the product.
+
+==================================================
+18. REMOVE CONFUSION
+==================================================
+
+Do not expose technical implementation details to the user unless useful.
+
+For example, do not make the user understand JSON before creating a workflow.
+
+JSON/schema should remain an internal implementation detail.
+
+Users should see:
+
+Trigger
+Condition
+AI
+Action
+
+not raw JSON.
+
+==================================================
+19. DESIGN SYSTEM
+==================================================
+
+Use:
+
+dark navy/black background
+subtle borders
+high-quality typography
+blue/violet primary accent
+green for success
+yellow for warnings
+red for errors
+
+Use fewer cards.
+
+Use stronger hierarchy.
+
+Use whitespace intentionally.
+
+Use subtle animations only where useful.
+
+Buttons should feel premium.
+
+==================================================
+20. IMPORTANT
+==================================================
+
+Do NOT remove the working workflow engine.
+
+Do NOT remove the existing database.
+
+Do NOT remove existing AI functionality.
+
+Refactor the frontend and improve the architecture where necessary.
+
+Reuse working backend functionality.
+
+If a feature is currently simulated, clearly label it as simulated.
+
+Do not create fake functionality.
+
+==================================================
+21. FINAL TEST
+==================================================
+
+After redesigning, test this complete flow:
+
+Home
+↓
+AI Builder
+↓
+Enter natural language
+↓
+AI generates workflow
+↓
+Visual workflow
+↓
+Edit node
+↓
+Test workflow
+↓
+Execution timeline
+↓
+Run details
+↓
+Activate workflow
+
+The entire experience should feel coherent.
+
+The final result should look like a serious AI automation product,
+NOT a generic dashboard.
+
+Do not merely describe the changes.
+
+Actually implement them, run the application, inspect the UI, and fix
+visual or functional problems before finishing.
